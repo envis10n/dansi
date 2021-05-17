@@ -4,6 +4,7 @@ import {
   Color,
   ColorValue,
   cyan,
+  parse,
   red,
   underline,
   yellow,
@@ -32,4 +33,10 @@ Deno.test("style-underline", () => {
   const v = cyan("Hello, world!");
   const uv = underline(v);
   assertEquals(uv, "\x1b[4;36mHello, world!\x1b[0m");
+});
+
+Deno.test("ansi-to-html", () => {
+  const v = cyan("Hello, world!");
+  const hv = parse.html(v);
+  assertEquals(hv, '<span class="f-cyan">Hello, world!</span>');
 });
