@@ -1,5 +1,8 @@
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dansi/mod.ts)
 # dansi
 Deno library for generating and parsing ANSI colors.
+
+[Documentation](https://doc.deno.land/https/deno.land/x/dansi/mod.ts)
 
 ## Features
 
