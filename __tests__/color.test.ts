@@ -37,6 +37,26 @@ Deno.test("style-underline", () => {
 
 Deno.test("ansi-to-html", () => {
   const v = cyan("Hello, world!");
-  const hv = parse.html(v);
-  assertEquals(hv, '<span class="f-cyan">Hello, world!</span>');
+  const hv = parse.html.toHTML(v);
+  assertEquals(hv, '<span class="ansi-cyan">Hello, world!</span>');
+});
+
+Deno.test("ansi-to-html-bg", () => {
+  const v = new Color(ColorValue.CYAN);
+  v.background = ColorValue.BLACK;
+  const hv = parse.html.toHTML(v.colorize("Hello, world!"));
+  assertEquals(
+    hv,
+    '<span class="ansi-cyan ansi-bg-black">Hello, world!</span>',
+  );
+});
+
+Deno.test("ansi-to-html-style-bg", () => {
+  const v = new Color(ColorValue.CYAN).underline();
+  v.background = ColorValue.BLACK;
+  const hv = parse.html.toHTML(v.colorize("Hello, world!"));
+  assertEquals(
+    hv,
+    '<span class="ansi-cyan-underline ansi-bg-black">Hello, world!</span>',
+  );
 });
