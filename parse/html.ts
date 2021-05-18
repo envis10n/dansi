@@ -21,8 +21,8 @@ export const colorMap: { [key: string]: string } = {
 
 export const styleMap: { [key: string]: string } = {
   0: "",
-  1: "bold",
-  4: "underline",
+  1: "ansi-bold",
+  4: "ansi-underline",
 };
 
 export function toHTML(ansi: string): string {
@@ -47,7 +47,7 @@ export function toHTML(ansi: string): string {
   }
   let hasOpenSpan = false;
   let currentSpanIndex = -1;
-  let currentSpanClasses: [string, string] = ["", ""]; // [FG, BG]
+  let currentSpanClasses: [string, string, string] = ["", "", ""]; // [FG, BG, Style]
   const res: string[] = [];
   tokens.forEach((token, i) => {
     if (!regHasANSI.test(token)) {
@@ -67,21 +67,22 @@ export function toHTML(ansi: string): string {
       if (m == null) return;
       const style = styleMap[m[1]];
       const color = colorMap[m[2]];
-      const cl = `${color}${style.length == 0 ? "" : `-${style}`}`;
       if (hasOpenSpan) {
         if (currentSpanClasses[0].length > 0) {
           // Close out
           res[currentSpanIndex] = `<span class="${
             currentSpanClasses.join(" ").trim()
           }">`;
-          currentSpanClasses = [cl, ""];
+          currentSpanClasses = [color, "", style];
           res.push("</span>");
           currentSpanIndex = res.push("<span goes here>") - 1;
         } else {
-          currentSpanClasses[0] = cl;
+          currentSpanClasses[0] = color;
+          currentSpanClasses[2] = style;
         }
       } else {
-        currentSpanClasses[0] = cl;
+        currentSpanClasses[0] = color;
+        currentSpanClasses[2] = style;
         currentSpanIndex = res.push("<span goes here>") - 1;
         hasOpenSpan = true;
       }
@@ -95,7 +96,7 @@ export function toHTML(ansi: string): string {
           res[currentSpanIndex] = `<span class="${
             currentSpanClasses.join(" ").trim()
           }">`;
-          currentSpanClasses = ["", color];
+          currentSpanClasses = ["", color, ""];
           res.push("</span>");
           currentSpanIndex = res.push("<span goes here>") - 1;
         } else {
@@ -114,7 +115,7 @@ export function toHTML(ansi: string): string {
         res[currentSpanIndex] = `<span class="${
           currentSpanClasses.join(" ").trim()
         }">`;
-        currentSpanClasses = ["", ""];
+        currentSpanClasses = ["", "", ""];
         currentSpanIndex = -1;
       }
     }
