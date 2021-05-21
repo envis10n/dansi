@@ -57,6 +57,6 @@ Deno.test("ansi-to-html-style-bg", () => {
   const hv = parse.html.toHTML(v.colorize("Hello, world!"));
   assertEquals(
     hv,
-    '<span class="ansi-cyan ansi-bg-black ansi-underline">Hello, world!</span>',
+    '<span class="ansi-ul-cyan ansi-bg-black">Hello, world!</span>',
   );
 });
