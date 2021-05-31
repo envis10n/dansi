@@ -60,3 +60,11 @@ Deno.test("ansi-to-html-style-bg", () => {
     '<span class="ansi-ul-cyan ansi-bg-black">Hello, world!</span>',
   );
 });
+
+Deno.test("ansi-to-objects", () => {
+  const v = new Color(ColorValue.CYAN);
+  const hv = parse.objects.toAnsiObjects(`${v.colorize("Hello, world!")} Derp`);
+  assertEquals(hv.length, 2);
+  assertEquals(hv[0].classes, ["ansi-cyan"]);
+  assertEquals(hv[0].text, "Hello, world!");
+});
